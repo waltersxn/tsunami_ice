@@ -22,30 +22,19 @@ for j = 1:length(a)
 a(j) = dot(vec_uo, U(:,j));
 end
 
-dumvec = [0,X,0];
 t = 0;% test starting with this, making sure IC matches
-usol = zeros(N-1,1);
-for i = 1:N-1
-    for j = 1:(N-1)
-    u = 0;
-    u = u + 2*a(j)*cos(omg(j).*t)*U(i,j);
-    end
-    usol(i) = u;
+
+solU = zeros(N-1,1);
+for i = 1:(N-1)
+	for j = 1:(N-1)
+		solU(i) = solU(i) + 2*a(j)*cos(omg(j)*t)*U(i,j);
+	end
 end
-usol = [0;usol;0];
-testvo = [0,vec_uo,0];
 
-
-plot( dumvec, testvo);
-
-% function u = f_usol(a,i,t,N)
-% for j = 1:(N-1)
-% u = 0;
-% u = u + 2*a(j)*cos(omg(j).*t)*U(i,j);
-% end
-% end
+plot(X, vec_uo, X, solU);
+legend('vec_uo','solU for t = 0');
 
 % a dummy function for I.C.
 function f = f_uo(x)
-f = cos(x);
+f = sin(2*pi*x);
 end
