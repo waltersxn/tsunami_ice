@@ -5,9 +5,11 @@ function [T,Y] = func_rk4(f,a,b,dt,Y0)
 % note: f must be of the form f(t,y1,...,yn), n>=1
 
 Y0 = Y0(:); % convert to column vector
+m = length(Y0);
 T = a:dt:b; 
 N = length(T) - 1; % # of time steps to take past 'a'
-Y = zeros(m,N+1) % to store Y at each time step
+Y = zeros(m,N+1); % to store Y at each time step
+Y(:,1) = Y0; % initialize
 
 for j = 1:N
 	K1 = feval(f, T(j),Y(:,j));

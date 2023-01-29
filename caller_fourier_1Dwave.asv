@@ -7,8 +7,7 @@ clc;
 N = 100; 
 c = 1;
 dt = 0.01;
-tstart = 0;
-tend = 100;
+T = dt:dt:100;
 
 h = 1/N;
 X = h:h:(N-1)/N;
@@ -30,38 +29,22 @@ a(j) = dot(u0, U(:,j));
 b(j) = dot(v0, U(:,j))/omg(j);
 end
 
-T = tstart:dt:tend;
-solU = zeros(length(u0),length(T));
-solU(:,1) = u0;
-for i = 2:length(T)
-	for j = 1:N-1
-		solU(:,i) = solU(:,i) + (a(j)*cos(omg(j)*T(i)) + ...
-			+ b(j)*sin(omg(j)*T(i)))*U(:,j);
-	end
+% begin updating solutions
+for t = 0:0.003:100
+    solU = u0;
+    for i = 1:(N-1)
+	    for j = 1:(N-1)
+		solU(i) = solU(i) + (a(j)*cos(omg(j)*t)*U(i,j) + b(j)*sin(omg(j)*t))*U(i,j);
+	    end
+    end
+disp(t)
+plot(X, u0, X, solU, LineWidth=2);
+axis([0 1 -3 3]);
+legend('u0','solU');
+pause(0.05)
+
 end
 
-% % begin updating solutions
-% for t = 0:0.003:100
-%     solU = u0;
-%     for i = 1:(N-1)
-% 	    for j = 1:(N-1)
-% 		solU(i) = solU(i) + (a(j)*cos(omg(j)*t)*U(i,j) + b(j)*sin(omg(j)*t))*U(i,j);
-% 	    end
-%     end
-% disp(t)
-% plot(X, u0, X, solU, LineWidth=2);
-% axis([0 1 -3 3]);
-% legend('u0','solU');
-% pause(0.05)
-% 
-% end
-
-for i = 1:length(T)
-    plot(X, u0, X, solU(:,i), LineWidth=2);
-    axis([0 1 -3 3]);
-    legend('u0','solU');    
-    pause(0.05)
-end
 
 % a dummy function for I.C.
 function f = f_u0(x)
@@ -69,5 +52,5 @@ f = sin(2*pi*x);
 end
 
 function f = f_v0(x)
-f = cos(2*pi*x);
+f = cos(x);
 end
