@@ -5,6 +5,7 @@ clc
 % for B.C. u(0,t) = u(1,t) = 0;
 % with I.C.'s u(x,0) = u0(x); du/dt(x,0) = v0(x);
 
+%c = 1;
 
 % define wave speed c in function f_mat_free_lin below
 
@@ -28,6 +29,37 @@ for i = 1:length(T)
 end
 
 
+function F = f_mat_free_lin(t,Y)
+% a matrix free execution of y = Mx
+% where M = [0,A;I,0]; x = [v;u]; v = du/dt
+% and A is the 2nd deg diff matrix 
+% on partition of size N
+% assumed: v,u each have length N-1
+    
+    % chop 'c' off the Y-vector
+    %c = Y(length(Y));
+    %Y = Y(1:length(Y)-1); 
+    c = 1;
+    l = length(Y); 
+    if mod(l,2) ~= 0, disp('length must be even'), return, end
+    N = l/2 + 1;
+    %%%% SET DESIRED WAVE SPEED HERE
+    h = 1/N; val = (c/h)^2;
+    
+    % set dv/dt = Au
+    F(1) = val*(-2*Y(N) + Y(N+1));
+    F(N-1) = val*(Y(2*N-3) - 2*Y(2*N-2));
+    for i = 2:N-2
+	    F(i) = val*(Y(i+N-2) - 2*Y(i+N-1) + Y(i+N));
+    end
+    % set du/dt = v
+    for i = N:2*N-2
+	    F(i) = Y(i-N+1);
+    end
+F = F(:);
+%F = [F;c]; % append c for the next iteration
+end
+
 function f = f_u0(x)
 % specify your initial u0 function here
 f = sin(2*pi*x);
@@ -36,32 +68,5 @@ end
 function f = f_v0(x)
 f = cos(2*pi*x);
 end
-
-function F = f_mat_free_lin(t,Y)
-% a matrix free execution of q = My
-% where M = [0,A;I,0]; y = [v;u]; v = du/dt
-% and A is the 2nd deg diff matrix 
-% on partition of size N
-% assumed: v,u each have length N-1
-
-l = length(Y); if mod(l,2) ~= 0, disp('length must be even'), return, end
-N = l/2 + 1;
-%%%% SET DESIRED WAVE SPEED HERE
-c = 1; h = 1/N; val = (c/h)^2;
-
-% set dv/dt = Au
-F(1) = val*(-2*Y(N) + Y(N+1));
-F(N-1) = val*(Y(2*N-3) - 2*Y(2*N-2));
-for i = 2:N-2
-	F(i) = val*(Y(i+N-2) - 2*Y(i+N-1) + Y(i+N));
-end
-% set du/dt = v
-for i = N:2*N-2
-	F(i) = Y(i-N+1);
-end
-F = F(:);
-end
-
-
 
 

@@ -40,21 +40,6 @@ for i = 2:length(T)
 	end
 end
 
-% % begin updating solutions
-% for t = 0:0.003:100
-%     solU = u0;
-%     for i = 1:(N-1)
-% 	    for j = 1:(N-1)
-% 		solU(i) = solU(i) + (a(j)*cos(omg(j)*t)*U(i,j) + b(j)*sin(omg(j)*t))*U(i,j);
-% 	    end
-%     end
-% disp(t)
-% plot(X, u0, X, solU, LineWidth=2);
-% axis([0 1 -3 3]);
-% legend('u0','solU');
-% pause(0.05)
-% 
-% end
 
 for i = 1:length(T)
     plot(X, u0, X, solU(:,i), LineWidth=2);
