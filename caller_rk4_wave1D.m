@@ -62,7 +62,7 @@ end
 
 function f = f_u0(x)
 % specify your initial u0 function here
-f = sin(2*pi*x);
+f = exp(-(x-0.5).^2.*30);
 end
 
 function f = f_v0(x)

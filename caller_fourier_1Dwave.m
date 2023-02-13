@@ -50,7 +50,7 @@ end
 
 % a dummy function for I.C.
 function f = f_u0(x)
-f = sin(2*pi*x);
+f = exp(-(x-0.5).^2.*30);
 end
 
 function f = f_v0(x)
