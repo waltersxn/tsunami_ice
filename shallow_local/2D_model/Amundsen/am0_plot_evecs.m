@@ -1,14 +1,33 @@
-%%% Use this code to plot
+%%% use this code to plot eigenvectors of the Amundsen sea plot 
+%%% code segments from Nurbek Tazhimbetov's 2022 PhD thesis
+%%% changes by Nestor Walters, advised by Eric Dunham
 
-% % % get mesh variables
+%%% given a .mat file containing eigenvalues and eigenvectors of the 
+% problem Adq/dt = Bq + forcing from Nurbek's code, plots the eigenvectors
+% as 2D+color plots, and lists freq and decay in the title
+% NOTE:: be sure to adjust for *i/2pi, depending on whether using raw
+% eigenvalues or adjusted for frequency
+
+%%% variables
+% W := 2N x K matrix containing K eigenvectors of Adq/dt = Bq + forcing
+% L := K eigenvalues of the system stored as vector or diag matrix
+% here, 2N is the length of the full [w;phi] vector in Nurbek's code
+% and K is the number of eigenvals/vecs that have been solved for
+% w0 comes from illapel_amundsen_ice.m and gives the length of the
+% displacement-only portion of the vector
+% see am0_get_eigs.m
+
+
+
+%%% get mesh variables
 run illapel_amundsen_ice.m
 Size = length(w0);
 
 %%% load desired evec matrix
 load am0_LambdaW2knorm_smabs_bvar_tvar.mat
 
-W = W2Knorm(1:Size,:);
-D = Lambda2K;
+X = W2Knorm(1:Size,:); % these may need to be adjusted
+L = Lambda2K;          % to what you call the eval, evec matrices
 
 % now to plot
 Suffix = ["-ImRe","-Abs"];
@@ -16,7 +35,7 @@ Suffix = ["-ImRe","-Abs"];
 s = 2;
 for k = 1:5
     % normalize w
-    w = W(:,k);
+    w = X(:,k);
     w = w / max(abs(w));
     
     % set title variables
@@ -25,8 +44,8 @@ for k = 1:5
     retitle = [ptitle,'-Real'];
     imtitle = [ptitle,'-Imag'];
     abtitle = [ptitle,'-Abs'];
-    stitle = ['Real (Decay): ',num2str(real(D(k))),...
-        '  Im (Freq): ',num2str(imag(D(k)))];
+    stitle = ['Real (Decay): ',num2str(real(L(k))),...
+        '  Im (Freq): ',num2str(imag(L(k)))];
     
   
   switch s
