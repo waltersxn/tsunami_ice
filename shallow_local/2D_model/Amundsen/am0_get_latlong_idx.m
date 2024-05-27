@@ -1,10 +1,17 @@
-%%%%%%%%%
-% ARRAY %
-%%%%%%%%%
+%%% original code from Nurbek Tazhimbetov
+%%% changes by Nestor Walters advised by Eric Dunham
+
+%%% use this code to retrieve the index corresponding to a given lat-long
+
+%%% to only retrive an index, only need the following three lines:
+
+% run illapel_amundsen_ice.m %% need this to call g.points();
 
 all_points = g.points();
 
 PIG02 = dsearchn(all_points, [217.7, -115.8]);
+
+%%% end three necessary lines
 
 fileID = fopen('illapel_amundsen_ice_q15_binary.bin', 'r');
 Size = n_water;
