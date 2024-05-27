@@ -1,3 +1,28 @@
+%%% modified code from Nurbek Tazhimbetov's PhD thesis, 2022 %%%
+%%% changes made by Nestor Walters, advised by Eric Dunham %%%
+
+% illapel_amundsen_ice.m is the culminating code that runs the simulation
+% it calls multiple other files, the most important being Fullplate.m
+
+%%% Some notes:
+%%% run experiments by adjusting bathymetry (bathy), ice thickness (thick),
+%%% and bending stiffness (BendS) of the ice, instructions inline
+
+%%% save_matrix = 'yes' and running the whole simulation outputs
+% mat_ABq_bvar_tvar.mat, which has stored the A and B matrices and q0
+% from Nurbek's original Adq/dt = Bq + forcing problem
+
+%%% note that every change to bathy, thick, or BendS will yield different
+% matrices, but unless you change the matname variable in Fullplate.m
+% e.g. to mat_ABq_bcon_tvar.mat, they will overwrite the existing version
+
+%%% when calling illapel_amundsen_ice.m in get_eigs, get_latlong, or
+%%% plot_evecs, you can comment out everything after q = Fullplate([] ...
+
+
+
+% matrix name 
+
 clear
 clc
 format long
@@ -20,8 +45,8 @@ rho_ice = 920 / cond_less;
 rho_water = 1000 / cond_less;
 time_width = 30;
 in_angle = 7 * pi / 4;
-% time_in_sec = 43200; %% set this time for original simulation
 time_in_sec = 60; %% added: only want to extract matrices A,B
+% time_in_sec = 43200; %% set this time for original simulation
 x_base = 0;
 y_base = 0;
 
@@ -64,8 +89,11 @@ y_axis = linspace(-Bn/2, 0, Bn);
 BATHY(BATHY <= 30) = 30;
 BATHY = BATHY / cond_less;
 [X, Y] = meshgrid(linspace(0, Bm/2, Bm), linspace(-Bn/2, 0, Bn));
-%%% (reset) adjustment 1/2 to experiment constancy effects on eigenmodes
+%%% (modified) 1 of 2 experiments on constancy effects on eigenmodes
+%%% to make bathymetry constant, comment out bathy = @(x,y)..."
+%%% and uncomment conBath, bathy = @(x,y)*conBath
 bathy = @(x, y) my_interpolation(x, y, X, Y, flip(BATHY));
+% conBath = 0.6;
 % bathy = @(x, y) 0.6;
 
 nu_const = 0.3;
@@ -86,11 +114,13 @@ run amundsen_mesh_setup.m;
 THICKNESS(isnan(THICKNESS)) = 500;
 THICKNESS = THICKNESS / cond_less;
 
-%%% adjustment 2/2 for experiment on constancy effects on eigenmodes
+%%% (modified) experiment 2 of 2 on constancy effects on eigenmodes
 thick = @(x, y) interp2(X, Y, flip(THICKNESS), full(x), full(y), 'spline');
 F = grid.evalOn(g_ice, thick);
-%%% adjust ice thickness here
-% F = 0*F + 0.6; %% this makes thick constant 0.6
+%%% to make ice thickness constant, comment out "thick = @(x,y)..."
+%%% and uncomment conThick, "F = 0*F + conThick"
+% conThick = 0.6;
+% F = 0*F + conThick;
 F(isnan(F)) = .25;
 F(F <= .25) = .25;
 full_F = [F; zeros(n_water - n_ice, 1)]; % ONLY ICE
