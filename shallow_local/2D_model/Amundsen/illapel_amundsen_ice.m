@@ -11,13 +11,15 @@
 %%% save_matrix = 'yes' and running the whole simulation outputs
 % mat_ABq_bvar_tvar.mat, which has stored the A and B matrices and q0
 % from Nurbek's original Adq/dt = Bq + forcing problem
+% the filename for matrices can be changed in Fullplate.m
 
 %%% note that every change to bathy, thick, or BendS will yield different
 % matrices, but unless you change the matname variable in Fullplate.m
-% e.g. to mat_ABq_bcon_tvar.mat, they will overwrite the existing version
+% they will overwrite the previously stored matrices
 
 %%% when calling illapel_amundsen_ice.m in get_eigs, get_latlong, or
-%%% plot_evecs, you can comment out everything after q = Fullplate([] ...
+% plot_evecs, you can comment out everything after q = Fullplate([] ...
+% to greatly reduce run time
 
 
 
