@@ -45,8 +45,8 @@ rho_ice = 920 / cond_less;
 rho_water = 1000 / cond_less;
 time_width = 30;
 in_angle = 7 * pi / 4;
-time_in_sec = 60; %% added: only want to extract matrices A,B
-% time_in_sec = 43200; %% set this time for original simulation
+%time_in_sec = 60; %% added: shorten when only want to extract matrices A,B
+time_in_sec = 43200; %% set this time for original simulation
 x_base = 0;
 y_base = 0;
 
@@ -56,7 +56,7 @@ video_mode = 'no';
 symmetry_check = 'no';
 time_solver = 'implicit';
 MMS = 'no';
-save_matrix = 'yes'; %% edited from 'no'
+save_matrix = 'no'; %% for the A,B matrices in Adq/dt = Bq + forcing
 non_reflective = 'yes';
 boundary_data = 'tsunami_data';
 tsunami_data_construct.file = 'tsunami_data_amundsen.m'; %%edited
