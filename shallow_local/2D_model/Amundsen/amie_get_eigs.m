@@ -7,6 +7,8 @@
 % we want sAv = Bv (where s is an eigenvalue)
 % so we solve [V,D] = eigs(B,A,k)
 
+%%% other test line for branch testing %%%
+
 % 1. %% retrieve the matrices made by running illapel_amundsen_ice.m
 % with bathy and thick variable
 % and setting save matrix to yes, saved by Fullplate.m
