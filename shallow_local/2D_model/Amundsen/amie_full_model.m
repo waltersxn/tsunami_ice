@@ -1,6 +1,8 @@
 %%% modified code from Nurbek Tazhimbetov's PhD thesis, 2022 %%%
 %%% changes made by Nestor Walters, advised by Eric Dunham %%%
 
+%%% Making a change to test git branch
+
 % The original illapel_amundsen_ice.m is the culminating code that runs the
 % simulation. Modified here to optimize the eigenmode problem
 
